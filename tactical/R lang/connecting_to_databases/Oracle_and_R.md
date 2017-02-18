@@ -13,7 +13,7 @@
 	
 	In R:
 	
-	```R
+	```r
 	# these can be done as system environment variables as well if you prefer
 	# I asked someone at my company for an updated tnsnames.ora file
 	
@@ -46,10 +46,12 @@
 	
 	You only need that first item **<database name>**
 7. now in R, set up your driver and connect to the db
-	```
-	# for the <con> object, use the same name that you found in step 6 above 
-	drv <- ROracle::dbDriver("Oracle") 
-	con <- ROracle::dbConnect(drv=drv, username="", password="", dbname=<database name here> 
+	```r
+	
+	# for the <con> object, use the same name that you found in step 6 above
+	drv <- ROracle::dbDriver("Oracle")
+	con <- ROracle::dbConnect(drv=drv, username="", password="", dbname=<database name here>
+	
 	```
 8. Write and fetch a query to test your connection:
 	
