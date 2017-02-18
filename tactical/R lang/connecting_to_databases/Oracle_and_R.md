@@ -55,7 +55,7 @@
 	```
 8. Write and fetch a query to test your connection:
 	
-	```
+	```r
 	# in R
 	query1 <- ROracle::dbSendQuery(con, "select * from <tablename>")  # you'll have to know a table name
 	result1 <- ROracle::fetch(query1)
