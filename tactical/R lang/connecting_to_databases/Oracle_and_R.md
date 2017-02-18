@@ -13,7 +13,7 @@
 	
 	In R:
 	
-	```
+	```R
 	# these can be done as system environment variables as well if you prefer
 	# I asked someone at my company for an updated tnsnames.ora file
 	
@@ -27,7 +27,7 @@
 	```
 	
 5. now in the same R script / environment, run:
-	```
+	```r
 	install.packages("ROracle")
 	y  # execute a 'y' in response to if you're alright with compiling from source
 	library(ROracle)  # load the library
