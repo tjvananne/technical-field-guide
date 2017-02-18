@@ -21,13 +21,9 @@
 	# if you're in 32 bit oracle client / 32 bit R:
 	
 	Sys.setenv("ORACLE_HOME"="C:\oracle\product\10.2.0\client_1")   # or wherever yours is
-	
 	Sys.setenv("OCI_INC"="C:\oracle\product\10.2.0\client_1\oci\include")  
-	
 	Sys.setenv("OCI_LIB32"="C:\oracle\product\10.2.0\client_1\bin")
-	
 	Sys.setenv("TNS_ADMIN"="C:/oracle/product/10.2.0/client_1/network/ADMIN")
-	
 	# only difference in a 64 bit version above would be using "OCI_LIB64" instead of "OCI_LIB32"
 	```
 	
