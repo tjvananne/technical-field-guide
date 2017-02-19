@@ -86,6 +86,7 @@ So now we have merged our country-dimension data into the shapefile and are read
     sapply(final_data, class)
 ```
     
+![chloropleth map example](map_chloropleth_ggplot2_example_001.PNG "Chloropleth Map")
     
     
     
