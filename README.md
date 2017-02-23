@@ -17,3 +17,15 @@ An example would be how all of the apply family functions work in R (lapply, sap
 This is where we'll put generic concepts such as what is happening under the hood of a random forest algorithm. The focus 
 is on the generic concept and not so much on the specific language being used (these will more than likely default to R 
 until I have a new favorite language).
+
+
+
+## Near future additions:
+- Daileys: start with javascript and node
+- R >> ggplot2 base plot font
+- R >> incremented index id within groups (dplyr, data.table, ave)
+    * how this causes an issue with joins (do entire joins tutorial as well)
+    * how to use this for overall trend data, matching start events with end events
+- R >> apply family functions
+- R >> tranforming all values in a dataframe that fit a certain data type (isolate all numeric columns)
+- R >> dplyr standard evals vs non standard evals examples (maybe with functions as well)
