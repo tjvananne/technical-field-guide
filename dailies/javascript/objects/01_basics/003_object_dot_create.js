@@ -50,7 +50,7 @@ var frog = Object.create(Object.prototype,
 
 
 // so we could also have stored that in an object itself
-myobj = {
+var myobj = {
     name: {
             value: 'Jerry',
             enumerable: true,
@@ -66,4 +66,6 @@ myobj = {
         }  // end of color property object  
 }
 
+
+//Object.create( <object to become prototype>, <object definition>)
 var frog2 = Object.create(Object.prototype, myobj);
