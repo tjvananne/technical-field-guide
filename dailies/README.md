@@ -1,8 +1,15 @@
 # Dailies
 
-Dailies are a way to keep revisiting new things I am learning. When I spend a month learning Javascript, I want to constantly revisit how property inheritance works, how prototyping works, what all changed with ES6 and how things can be done the ES5 way, etc. 
+## JavaScript Dailies:
 
+### Must know before moving on to node or jquery:
 
-Eventually, content in the dailies section will be moved into its rightful place in either the strategic or tactical directories (most likely for a specific language's programming idiom section).
+I must be able to implement and explain each of these without reference:
+
+* ~~object prototypal inheritance~~
+* closures (and all scoping rules)
+* callbacks
+* iife's, when to use, how to use, etc
+* ES16 changes (arrow functions and class-like object constructors)
 
 
