@@ -7,6 +7,7 @@
 I must be able to implement and explain each of these without reference:
 
 * ~~object prototypal inheritance~~
+* function methods (apply vs call) - use them within object properties too
 * closures (and all scoping rules)
 * callbacks
 * iife's, when to use, how to use, etc
