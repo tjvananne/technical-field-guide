@@ -9,6 +9,10 @@
 # next step is to make this use data table for increased speed
 
 
+# set this to true to automatically run the tests when you source this
+run_tests <- FALSE
+
+
 
 # Function Definition ________________________________________________________________________________________________
 
@@ -61,24 +65,27 @@
 
 # TESTING _________________________________________________________________________________________
 
-    # valid single value returned
-    record_lookup(iris, 7.9, "Sepal.Length", "Species")
+    if(run_tests) {
     
-    # valid single value returned but multiple values found
-    record_lookup(iris, "virginica", "Species", "Sepal.Width")
-    
-    # multiple values found and multiple returned
-    record_lookup(iris, "virginica", "Species", "Sepal.Width", return_vector=T)
-    
-    # valid columns, but value to look up was not found (returns NA)
-    record_lookup(iris, "not found", "Species", "Sepal.Width")
-    
-    # invalid column name (field)
-    record_lookup(iris, "virginica", "not a column name", "Sepal.Width")
-    
-    # invalid column name (retfield - field to be returned)
-    record_lookup(iris, "virginica", "Species", "not a column name")
-    
-    # not a dataframe
-    record_lookup("not a dataframe", "virginica", "Species", "Sepal.Width")
-    
+        # valid single value returned
+        record_lookup(iris, 7.9, "Sepal.Length", "Species")
+        
+        # valid single value returned but multiple values found
+        record_lookup(iris, "virginica", "Species", "Sepal.Width")
+        
+        # multiple values found and multiple returned
+        record_lookup(iris, "virginica", "Species", "Sepal.Width", return_vector=T)
+        
+        # valid columns, but value to look up was not found (returns NA)
+        record_lookup(iris, "not found", "Species", "Sepal.Width")
+        
+        # invalid column name (field)
+        record_lookup(iris, "virginica", "not a column name", "Sepal.Width")
+        
+        # invalid column name (retfield - field to be returned)
+        record_lookup(iris, "virginica", "Species", "not a column name")
+        
+        # not a dataframe
+        record_lookup("not a dataframe", "virginica", "Species", "Sepal.Width")
+        
+    }
