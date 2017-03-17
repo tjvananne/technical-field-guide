@@ -10,7 +10,7 @@ I usually resort to this whenever I get one of those unbelievably frustrating "e
 ## where to get wheels
 
 There are two major places I go to look for python wheel files:
-- [python wheels](pythonwheels.com)
+- [python wheels](www.pythonwheels.com)
 - Christoph Gohlke's ["Unofficial Windows Binaries for Python Extension Packages"](http://www.lfd.uci.edu/~gohlke/pythonlibs/)
     - It's probably about time this became "official" with how many pieces of documentation refer back to this person's website, keep up the good work Christoph, you're awesome
 
