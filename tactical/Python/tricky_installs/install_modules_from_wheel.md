@@ -23,19 +23,21 @@ Also, if you're using a virtual environment, make sure you activate it before ge
     activate py3464
     
 
-I messed up my paths for virtual environments, so I have to cd into the `py3464/Scripts` directory, then run `activate` in the command prompt in order to activate my virtual environment. That is probably an easy fix but I haven't got around to it yet and the workaround takes two seconds.
+I messed up my paths for virtual environments, so I have to cd into the `py3464/Scripts` directory, then run `activate` in the command prompt in order to activate my virtual environment. That is probably an easy fix but I haven't got around to it yet and the workaround takes two seconds. (Plus I've added enough junk to my %PATH% variable that I think I'm fine with this workaround).
 
+
+
+## Installing the wheel
 
 Now once your virtual environment is activated (if you're just using the non-virtualenv version of python, forget about that last part), cd into
 your "downloads" directory, or wherever you have the freshly downloaded wheel file.
 
-## Installing the wheel
 
 Next, execute: 
 
     pip install (name of wheel here.whl)
     
-
+Don't forget the `.whl` extension, or better yet just copy pasta.
 
     
 
