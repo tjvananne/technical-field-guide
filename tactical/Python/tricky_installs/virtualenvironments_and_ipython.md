@@ -11,11 +11,11 @@ For this example, we will consider python 3.4 to be our "primary" version
 and 2.7 to be the "secondary" version. 
 
 
-1) Fresh install python 3.4 64 bit version
-	- During install, click "yes" for adding to path
+1) Fresh download and install python 3.4 64 bit version
+	- During install, **click "yes" for adding to path**
 
 2) Fresh install python 2.7 64 bit version
-	- During install, keep "no" checked to not add to path (we'll add it later manually)
+	- During install, **click "no" checked to not add to path** (we'll add it later manually)
 
 3) Now open a command prompt and execute:
 
@@ -45,10 +45,9 @@ of your virtual environments to be located (mine is `C:/venvs`)
 
 ## 4) Install virtualenv and virtualenvwrapper-win
 
-Close any command prompts you have open and then open a new command prompt and execute:
+Close any command prompts you have open and then open a new command prompt and execute these commands:
 
 	python -m pip install virtualenv
-
 	python -m pip install virtualenvwrapper-win
 
 	
@@ -88,12 +87,10 @@ execute:
 
 ## 8) Install virtualenv and virtualenvwrapper-win
 	
-then execute:
+then execute these commands:
 
 	python -m pip install virtualenv
- 
 	python -m pip install virtualenvwrapper-win
-
 	mkvirtualenv py2764
 
 	
