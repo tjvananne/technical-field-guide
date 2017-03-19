@@ -1,60 +1,98 @@
-Fresh install python 3.4 64 bit version
+
+# Multiple Python Versions on Windows with virtualenvwrapper-win
+
+## 1) Download and install
+
+For example, I want to be able to run python 3.4 and python 2.7 on my machine. 
+These instructions should work for whatever combination of Python versions 
+you want to install. (It can be more than just 2 if you want).
+
+For this example, we will consider python 3.4 to be our "primary" version
+and 2.7 to be the "secondary" version. 
+
+
+1) Fresh install python 3.4 64 bit version
 - During install, click "yes" for adding to path
 
-Fresh install python 2.7 64 bit version
-- During install, keep "no" checked to not add to path
+2) Fresh install python 2.7 64 bit version
+- During install, keep "no" checked to not add to path (we'll add it later manually)
 
-test that executing "python" starts python version 3.4
+3) Now open a command prompt and execute:
 
-exit python
+	python
+	
+It should put you in python 3.4
 
-execute:
+4) exit python with `ctrl-Z` then pressing `ENTER` key
+
+## 2) Upgrade pip
+
+1) execute:
 
 	python -m pip install --upgrade pip
 
-then:
+
+## 3) Set a "WORKON_HOME" system environment variable	
+
+1) Click start button and search "system environment variables" -- you should see
+something similar to "edit system environment variables", click that.
+
+2) On "advanced" tab, click "Enviornment Variables" button, then in the bottom half, click the "New..." button.
+
+3) Name the variable "WORKON_HOME" and make the value the file path to where you want all
+of your virtual environments to be located (mine is `C:/venvs`) 
+
+
+## 4) Install virtualenv and virtualenvwrapper-win
+
+Close any command prompts you have open and then open a new command prompt and execute:
+
 	python -m pip install virtualenv
 
-
-then: 
+Then execute: 
 	python -m pip install virtualenvwrapper-win
 
-then:
+## 5) Create a virtual env for this python version	
+
+In a command prompt execute the `mkvirtualenv` command followed by what you want to name your 
+virtual environment. I like to use the naming convention 'py' + '2 digit version numb' 
++ bit version (64 or 32):
 
 	mkvirtualenv py3464
 
 Go to wherever you specified your WORKON_HOME path to be and make sure it actually created your virtual environment.
 
-In the same command prompt window, test out your `deactivate`, `workon py3464` commands to make sure you're able to activate and deactivate your environment
+In the same command prompt window, test out your `deactivate`, `workon py3464` commands to make sure you're able to toggle between activating and deactivating your environment
 
-### setting up a virtual env for python 2.7
+## 6) Set up Paths for secondary Python version
 
-Now go back to environment variables and add these two to your path manually:
+Now go back to environment variables and add these two to your path manually (I'm adding `Python27` because that is the secondary version I would like to
+install, replace that with whatever version you're wanting to be your secondary):
 
 	C:/Python27
 	C:/Python27/Scripts
 
 Then move them **above/before the corresponding python 3.4 paths** that are already in your PATH variable.
+(I know, this kinda sucks, but its only for the setup process initially!)
 
 **CLOSE AND REOPEN** your command prompt if you didn't close it yet. 
 
-Type in `python` and make sure you get the 2.7 version REPL and not the 3.4 version.
+Type in `python` and make sure you get the 2.7 (secondary) version REPL and not the 3.4 (primary) version.
 
+## 7) Upgrade pip for secondary python version
 
 execute:
 
 	python -m pip install --upgrade pip
 
-then:
+## 8) Install virtualenv and virtualenvwrapper-win
+	
+then execute:
 
 	python -m pip install virtualenv
 
 
-You might get a warning there that it is already installed?
-that confused me... Not sure how that happened to be honest..
-
-
-then: 
+then execute: 
 
 	python -m pip install virtualenvwrapper-win
 
@@ -64,15 +102,16 @@ then:
 
 Now, just like last time, go to wherever your WORKON_HOME path is pointing and make sure that the py2764 directory / environment was created.
 
-Not test our your `deactivate` and `workon py2764` commands to make sure those are both working.
+Now test our your `deactivate` and `workon py2764` commands to make sure those are both working.
 
-Test those same commands for you py3464 environment as well to make sure they are both working.
+Make sure you're able to switch back and forth between your primary and secondary versions in the same command prompt.
 
 And now you're good to go! Just make sure you have the correct one activated whenever you're doing work.
 
 *Note that calling `python -m ...` will refer to the correct version of python that corresponds to whichever virtualenv you have activated*
 
-*also note, it is advisable for some reason to use the `python -m pip install [package name here]` version of the pip install command when on windows. I'm not asking questions here, just doing it, because it works better and is cleaner.*
+*also note, it is advisable for some reason to use the `python -m pip install [package name here]` version of the pip install command when on windows. 
+I'm not asking questions here, just doing it, because it works better and is cleaner.*
 
 ## using IPython (jupyter) notebook inside virtualenv
 
@@ -83,16 +122,16 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 *for the instructions below, my virtual env is called `py3464` so replace your virtual env name with wherever you see that*
 
 
-0) activate your virtualenv and install jupyter
+1) activate your virtualenv and install jupyter
 
 	workon py3464
 	python -m pip install jupyter
 
-1) install the ipython kernel module into your virtualenv
+2) install the ipython kernel module into your virtualenv
 
 	python -m pip install ipykernel
 
-2) run the kernel "self-install" script:
+3) run the kernel "self-install" script:
 
 	python -m ipykernel install --user --name=py3464
 
