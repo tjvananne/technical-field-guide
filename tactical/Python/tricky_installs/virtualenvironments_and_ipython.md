@@ -116,7 +116,7 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 *for the instructions below, my virtual env is called `py3464` so replace your virtual env name with wherever you see that*
 
 
-1) activate your virtualenv and install jupyter
+**1) activate your virtualenv and install jupyter **
 
     
     workon py3464
