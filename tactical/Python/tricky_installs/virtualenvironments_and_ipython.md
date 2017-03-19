@@ -116,21 +116,20 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 *for the instructions below, my virtual env is called `py3464` so replace your virtual env name with wherever you see that*
 
 
-**1) activate your virtualenv and install jupyter **
+**1) activate your virtualenv and install jupyter**
 
     
     workon py3464
-    
 	python -m pip install jupyter
     
 	
-2) install the ipython kernel module into your virtualenv
+**2) install the ipython kernel module into your virtualenv**
 
 
     python -m pip install ipykernel
 
 	
-3) run the kernel "self-install" script:
+**3) run the kernel "self-install" script:**
 
 
     python -m ipykernel install --user --name=py3464
