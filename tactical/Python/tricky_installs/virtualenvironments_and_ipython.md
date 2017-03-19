@@ -118,11 +118,11 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 
 1) activate your virtualenv and install jupyter
 
-
+    
     workon py3464
     
 	python -m pip install jupyter
-
+    
 	
 2) install the ipython kernel module into your virtualenv
 
