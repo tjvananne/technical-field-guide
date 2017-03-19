@@ -12,10 +12,10 @@ and 2.7 to be the "secondary" version.
 
 
 1) Fresh install python 3.4 64 bit version
-- During install, click "yes" for adding to path
+	- During install, click "yes" for adding to path
 
 2) Fresh install python 2.7 64 bit version
-- During install, keep "no" checked to not add to path (we'll add it later manually)
+	- During install, keep "no" checked to not add to path (we'll add it later manually)
 
 3) Now open a command prompt and execute:
 
@@ -49,14 +49,14 @@ Close any command prompts you have open and then open a new command prompt and e
 
 	python -m pip install virtualenv
 
-Then execute: 
 	python -m pip install virtualenvwrapper-win
 
+	
 ## 5) Create a virtual env for this python version	
 
 In a command prompt execute the `mkvirtualenv` command followed by what you want to name your 
-virtual environment. I like to use the naming convention 'py' + '2 digit version numb' 
-+ bit version (64 or 32):
+virtual environment. I like to use the naming convention 'py' + '2 digit 
+version number' + bit version (64 or 32):
 
 	mkvirtualenv py3464
 
@@ -69,8 +69,9 @@ In the same command prompt window, test out your `deactivate`, `workon py3464` c
 Now go back to environment variables and add these two to your path manually (I'm adding `Python27` because that is the secondary version I would like to
 install, replace that with whatever version you're wanting to be your secondary):
 
-	C:/Python27
-	C:/Python27/Scripts
+* These are what I'm adding 
+	- C:/Python27
+	- C:/Python27/Scripts
 
 Then move them **above/before the corresponding python 3.4 paths** that are already in your PATH variable.
 (I know, this kinda sucks, but its only for the setup process initially!)
@@ -90,30 +91,23 @@ execute:
 then execute:
 
 	python -m pip install virtualenv
-
-
-then execute: 
-
+ 
 	python -m pip install virtualenvwrapper-win
-
-then:
 
 	mkvirtualenv py2764
 
-Now, just like last time, go to wherever your WORKON_HOME path is pointing and make sure that the py2764 directory / environment was created.
-
-Now test our your `deactivate` and `workon py2764` commands to make sure those are both working.
-
-Make sure you're able to switch back and forth between your primary and secondary versions in the same command prompt.
-
-And now you're good to go! Just make sure you have the correct one activated whenever you're doing work.
+	
+* Now, just like last time, go to wherever your WORKON_HOME path is pointing and make sure that the py2764 directory / environment was created.
+* Now test our your `deactivate` and `workon py2764` commands to make sure those are both working.
+* Make sure you're able to switch back and forth between your primary and secondary versions in the same command prompt.
+* And now you're good to go! Just make sure you have the correct one activated whenever you're doing work.
 
 *Note that calling `python -m ...` will refer to the correct version of python that corresponds to whichever virtualenv you have activated*
 
 *also note, it is advisable for some reason to use the `python -m pip install [package name here]` version of the pip install command when on windows. 
 I'm not asking questions here, just doing it, because it works better and is cleaner.*
 
-## using IPython (jupyter) notebook inside virtualenv
+## 9) using IPython (jupyter) notebook inside virtualenv
 
 *Note that this guide assumes you already also have virtualenvwrapper or virtualenvwrapper-win set up (like we just did)*
 
@@ -124,17 +118,24 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 
 1) activate your virtualenv and install jupyter
 
-	workon py3464
+
+    workon py3464
+    
 	python -m pip install jupyter
 
+	
 2) install the ipython kernel module into your virtualenv
 
-	python -m pip install ipykernel
 
+    python -m pip install ipykernel
+
+	
 3) run the kernel "self-install" script:
 
-	python -m ipykernel install --user --name=py3464
 
+    python -m ipykernel install --user --name=py3464
+
+	
 
 
 
