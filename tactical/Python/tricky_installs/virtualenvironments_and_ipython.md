@@ -132,6 +132,19 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
     python -m ipykernel install --user --name=py3464
 
 	
+## Log of Errors I received while setting this up:
+
+
+**Microsoft Visual C++ 9.0 is required.**
+- received on 3/19/2017
+- while installing jupyter in my python 2.7 (py2764) virtual environment
+- Full python installer verison name was python-2.7.11amd64.msi
+- Running in Windows 10
+- Python error message says to go to this [site](http://aka.ms/vcpython27) and download Microsoft Visual C++ 9.0 for Python 2.7
+	- **Installing C++ compiler for Python 2.7 from the site above worked**
+
+
+	
 
 
 
