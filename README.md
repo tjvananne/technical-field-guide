@@ -30,3 +30,7 @@ until I have a new favorite language).
 - R >> tranforming all values in a dataframe that fit a certain data type (isolate all numeric columns)
 - R >> dplyr standard evals vs non standard evals examples (maybe with functions as well)
 - Alexa >> Cutiemails deep dive (might not be exactly best practice, but is a good example of dynamodb interaction)
+
+
+### I'm currently weak on:
+- R matrix -- need to learn different types of matrix operations, linear algebra, and different types / forms of sparse matrices
