@@ -24,19 +24,19 @@
 5) Now execute this bash command in the terminal:
 Note: for this example, `ubuntu16_c_dev_foldershare` is the name of my shared folder I created in the Ubuntu VM and is also the name of the directory I created in the host Windows machine. The path to this directory in the Ubuntu VM is `/home/taylor/Documents/`. My username in the Ubuntu VM is `taylor`. These are all fields that you will need to replace with whatever values you need for your scenario. 
 
-  
-    
+
+    ```
     sudo mount -t vboxsf ubuntu16_c_dev_foldershare /home/taylor/Documents/ubuntu16_c_dev_foldershare
-    
+    ```
 
 
 
 6) To set up proper permissions for your user account, execute this bash command in the terminal:
 
 
-    
+    ```
     sudo adduser taylor vboxsf
-    
+    ```
 
 
 7) Now **log out and log back in** to allow the security changes to your user account to take affect. You should now be ready to go!
