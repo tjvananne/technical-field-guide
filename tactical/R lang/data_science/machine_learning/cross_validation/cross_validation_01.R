@@ -1,5 +1,10 @@
 
 
+# for understanding what cross val is, why to do it, and the types:
+# https://www.youtube.com/watch?v=e0JcXMzhtdY
+
+
+
 #' cross validation with unstratified splitting (not looking at the target value to split evenly)
 
     # creating folds function:
