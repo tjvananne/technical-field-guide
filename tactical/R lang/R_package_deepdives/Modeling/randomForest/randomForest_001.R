@@ -277,3 +277,74 @@ library(randomForest)
     outlier_df <- outlier(iris.rf)
     
     
+    
+    
+    
+# partialPlot - partial dependence plot
+    
+    rm(list=ls())
+    library(randomForest)
+
+    #' So this one I'll need to come back to, there is a lot 
+    #' of mathematical notation here and this seems to be a 
+    #' very complex calculation
+        
+    
+    # for now, here is a runthrough
+    data(iris)
+    set.seed(543)
+    iris.rf <- randomForest(Species~., iris)
+    partialPlot(iris.rf, iris, Petal.Width, "versicolor")
+    
+    
+    ## Looping over variables ranked by importance:
+    data(airquality)
+    airquality <- na.omit(airquality)
+    set.seed(131)
+    ozone.rf <- randomForest(Ozone ~ ., airquality, importance=TRUE)
+    imp <- importance(ozone.rf)
+    impvar <- rownames(imp)[order(imp[, 1], decreasing=TRUE)]
+    
+    op <- par(mfrow=c(2, 3))
+    for (i in seq_along(impvar)) {
+        partialPlot(ozone.rf, airquality, impvar[i], xlab=impvar[i],
+                    main=paste("Partial Dependence on", impvar[i]),
+                    ylim=c(30, 70))
+    }
+    par(op)
+    
+    
+    # requires dev tools, but interesting to compare to output of partialPlots
+    library(reprtree)
+    reprtree:::plot.getTree(ozone.rf) 
+    
+    
+    
+    
+    
+# plot.randomForest - here we go, big time stuff
+    
+    rm(list=ls())
+    library(randomForest)
+    
+    set.seed(1776)
+    data(mtcars)
+    plot(randomForest(mpg ~ ., mtcars, keep.forest=FALSE, ntree=100), log="y")
+    
+    
+    
+    
+    
+# predict.randomForest - come back to this one'
+    
+    # going to come back to this
+
+    
+    
+    
+    
+# almost done, only about 5 more functions left
+    
+    
+    
+    
