@@ -1,0 +1,125 @@
+
+several issues with R in ubuntu:
+
+4/27/2017 - I didn't realize until completing all of these steps that, the way I built my version of R on Ubuntu (so that it could use the tm package) also disabled any form of plotting to the graphics device... Not sure how to resolve that.
+
+
+https://explainshell.com
+
+
+0) not sure how to upgrade R version in ubuntu ------------------
+
+https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-16-04-2
+
+add external repository maintained by CRAN
+this will request keys?
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+
+(above did not work, the request timed out - article is from Sept 2016)
+
+
+0.5) another attempt
+
+https://askubuntu.com/questions/824397/upgrade-r-3-2-to-3-3-using-tar-gz-file-on-ubuntu-16-04
+
+
+https://cran.rstudio.com
+for Linux -> Ubuntu -> Xenial -> r-base_3.3.2.orig.tar.gz
+
+
+
+download from cran -> ubuntu -> 3.3.2
+
+cd into downloads folder and execute:
+tar xf r-base_3.3.2.orig.tar.gz
+cd R-3.3.2
+apt-get install gfortran libreadline-dev bzip2-dev liblzma-dev libcurl4-gnutls-dev
+./configure --enable-R-shlib=yes --with-readline=no --with-x=no
+sudo make
+sudo make install
+
+# https://support.rstudio.com/hc/en-us/articles/200486138-Using-Different-Versions-of-R
+# https://askubuntu.com/questions/58814/how-do-i-add-environment-variables
+# ok, so that process appears to have installed this version of R and overwrote the
+# previously installed version which was 3.2.x...
+
+# but! if we see that both versions still exist, do the following "path" manipulation
+# for RStudio to know which version of R to use
+
+# add this line to the bottom of ".profile" in my "home" dir
+# need to open file explorer, go to view, and "show hidden files"
+export RSTUDIO_WHICH_R="/home/taylor/Downloads/R-3.3.2/bin/R"
+
+
+# add this to /etc/environment
+RSTUDIO_WHICH_R="/home/taylor/Downloads/R-3.3.2/bin/R"
+
+
+ERROR LOG for 0.5) *******************
+./configure
+
+
+output:
+configure: error: --with-x=yes (default) and X11 headers/libs are not available
+
+Going to try the provided tips for libreadline-dev install
+
+same error:
+http://stackoverflow.com/questions/17473547/error-with-readline-yes-default-and-headers-libs-are-not-available
+
+trying this advice from this link above
+so now run this one:
+
+./configure --with-readline=no --with-x=no
+
+got the "R is now configured" message so it was successful
+
+now execute the "make" command to build it out:
+make
+
+this is taking a good long while
+
+so I think I just installed this all into "downloads" directory.. maybe that is ok?
+
+this worked fine, but then when adding this bin/R directory to the
+path for RStudio, it crashed
+
+cd back into that R-3.3.2 directory and back out of this
+
+execute:
+make uninstall
+
+(no never mind, go back to download and unzip the tar.gz again)
+
+then try this one:
+cd R-3.3.2
+./configure --enable-R-shlib=yes --with-readline=no --with-x=no
+sudo make
+sudo make install
+
+
+
+
+
+1) can't install devtools ----------------------
+
+devtools requires these system packages:
+
+sudo apt-get -y install libcurl4-gnutls-dev libxml2-dev libssl-dev
+
+sudo su - -c "R -e \"install.packages('devtools', repos='http://cran.rstudio.com/')\""
+
+I can now "library(devtools)" - NICE!
+
+
+
+
+2) installing with devtools ---------------------
+
+# install.packages("devtools")
+    # library(devtools)
+    # 
+    # slam_url <- "https://cran.r-project.org/src/contrib/Archive/slam/slam_01.1-37.tar.gz"
+    # slam_url <- "https://cran.rstudio.com/src/contrib/slam_0.1-40.tar.gz"
+    # install_url(slam_url)
+
