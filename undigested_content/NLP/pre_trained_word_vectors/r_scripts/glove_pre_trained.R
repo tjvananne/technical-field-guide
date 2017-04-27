@@ -9,7 +9,7 @@
     list.dirs()
     list.files("pre_trained")
     
-    g6b <- scan(file = "pre_trained/glove.6B.50d.txt", what="", sep="\n")
+    g6b <- scan(file = "LARGE_FILES_pre_trained/glove.6B.50d.txt", what="", sep="\n")
     
         class(g6b)  # character vector 
         g6b[58]  # this is a single quote, that's not going to work for us
@@ -60,8 +60,8 @@
         names(glove)
     
         
-
-
+    saveRDS(glove, file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
+    
 
 # exploring how to use the pre-trained word vector:
     # install.packages('text2vec')
@@ -128,7 +128,76 @@
     
 
 # OK LET'S T-SNE THIS!! Tag it for really common things like body-parts, emotions, maybe cities
-
+# t-SNE with these categories! http://www.enchantedlearning.com/wordlist/body.shtml
+    
     library(Rtsne)
+    library(plyr)
+    library(dplyr)
+    
+    
+    glove <- readRDS(file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
+    
+    t_glove <- as.data.frame(t(glove))
+    head(t_glove)
+    
+        # read in all of the category files
+        tsne_cats <- list.files("LARGE_FILES_pre_trained/categories_for_tsne")
+        tsne_cats_file <- list.files("LARGE_FILES_pre_trained/categories_for_tsne", full.names = T)
         
+        list_cat_dfs <- vector(mode="list", length=length(tsne_cats))
+        
+        for(i in 1:length(tsne_cats)) {
+            list_cat_dfs[[i]] <- read.csv(tsne_cats_file[i], stringsAsFactors = F)
+        }
+        
+        cat_dfs <- dplyr::bind_rows(list_cat_dfs)
+        
+    
+    # assign the label of the vector to its own variable
+    t_glove$label <- names(glove)     
+    head(t_glove)    
+    
+    
+    
+    # map in the category if applicable
+    ?mapvalues
+    t_glove$label %>% head()
+    
+        class(t_glove$label)
+        class(cat_dfs$type)
+    
+    sum(t_glove$label %in% cat_dfs$type)
+            
+    t_glove$category <- plyr::mapvalues(x=t_glove$label, from=cat_dfs$type, to=cat_dfs$category)
+    t_glove$category[!t_glove$category %in% cat_dfs$category] <- "other"  # if it didn't match, it shouldn't retain the "label" field
+    t_glove$category %>% unique()    
+    
+    set.seed(1)
+    t_glove_nocat <- t_glove[t_glove$category == "other",]
+    t_glove_nocat <- t_glove_nocat[sample(1:nrow(t_glove_nocat), 10000),]
+    t_glove_cat <- t_glove[t_glove$category != "other",]
+    
+    t_glove_subset <- rbind(t_glove_nocat, t_glove_cat)
+    t_glove_subset$category <- as.factor(t_glove_subset$category)
+    t_glove_subset_unlabeled <- t_glove_subset[, setdiff(names(t_glove_subset), c("label", "category"))]
+    
+    t_glove_subset$category
+    
+    # not sure how long this will take lol
+    tsne <- Rtsne(t_glove_subset_unlabeled, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)    
+    
+    tsne$label <- t_glove_subset$label
+    tsne$category <- t_glove_subset$category
+    
+    tsne
+    
+    colors = rainbow(length(unique(t_glove_subset$category)))    
+    levels(t_glove_subset$category)
+    colors = c("blue", "green", "orange", "gray")    
+    
+    plot(tsne$Y, t='n', main="tsne")
+    points(tsne$Y, col=colors[t_glove_subset$category], pch=16)    
+    
+    
+    
     
