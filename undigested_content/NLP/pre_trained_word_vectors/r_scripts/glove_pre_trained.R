@@ -8,6 +8,10 @@
 #' 4) lets do some Kaggling on quora duplicates!
 
 
+# an example that might be more interesting would be 
+# germany + capital == berlin?
+# france + capital == paris?
+# texas + capital == austin?
 
 
 
@@ -176,24 +180,29 @@
 # map in the category if applicable
     t_glove$category <- plyr::mapvalues(x=t_glove$label, from=cat_dfs$type, to=cat_dfs$category)
     t_glove$category[!t_glove$category %in% cat_dfs$category] <- "other"  # if it didn't match, it shouldn't retain the "label" field
+    t_glove_subset$category <- as.factor(t_glove_subset$category)  # everything will work better if this is a factor
     t_glove$category %>% unique()    
     
+    
+    # sample from t_glove so we don't have 400k points
     set.seed(1)
     t_glove_nocat <- t_glove[t_glove$category == "other",]
     t_glove_nocat <- t_glove_nocat[sample(1:nrow(t_glove_nocat), 10000),]
     t_glove_cat <- t_glove[t_glove$category != "other",]
-    
     t_glove_subset <- rbind(t_glove_nocat, t_glove_cat)
-    t_glove_subset$category <- as.factor(t_glove_subset$category)
-    t_glove_subset_unlabeled <- t_glove_subset[, setdiff(names(t_glove_subset), c("label", "category"))]
     
+    
+    # setting up for t-sne
+    t_glove_subset_unlabeled <- t_glove_subset[, setdiff(names(t_glove_subset), c("label", "category"))]
     t_glove_subset$category %>% unique()
     
-    # not sure how long this will take lol
+    
+    
+
+    
+# not sure how long this will take (running the t-sne)
     set.seed(1)
     tsne <- Rtsne(t_glove_subset_unlabeled, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)    
-    tsne$label <- t_glove_subset$label
-    tsne$category <- t_glove_subset$category
     
     
     
@@ -237,6 +246,74 @@
         ggtitle("Word Vector -- t-SNE Dimensionality Reduction")
     
     plot(g1)
+    
+    
+    
+    
+    
+# attach the same labels from before:
+    
+    # map in the labels from our paris / france example:
+    
+    points_of_interest <- c("king", "queen", "man", "woman")
+    
+    t_glove_nocat_extra <- t_glove[t_glove$label %in% points_of_interest,]
+    t_glove_subset <- rbind(t_glove_subset, t_glove_nocat_extra) 
+    t_glove_subset <- t_glove_subset[!duplicated(t_glove_subset),]
+    
+    # set up for another t-sne
+    t_glove_subset_unlabeled <- t_glove_subset[, setdiff(names(t_glove_subset), c("label", "category"))]
+    t_glove_subset$category %>% unique()
+    
+    t_glove_subset %>% head()
+    sum(t_glove_subset$label == 'paris')
+    
+    # t-sne
+    set.seed(2)
+    tsne2 <- Rtsne(t_glove_subset_unlabeled, dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)    
+    
+        
+    tsne2_df <- data.frame(tsne2$Y)
+    tsne2_df$label <- t_glove_subset$label
+    
+        # do we need this for this analysis?
+        # tsne2_df$category <- t_glove_subset$category    
+        # tsne2_df$other_category <- as.factor(tsne_df2$category == "other")
+    
+    
+    tsne2_df$relative_dist <- "other"
+    tsne2_df$relative_dist[tsne2_df$label == "king"] <- "king"
+    tsne2_df$relative_dist[tsne2_df$label == "queen"] <- "queen"    
+    tsne2_df$relative_dist[tsne2_df$label == "man"] <- "man"
+    tsne2_df$relative_dist[tsne2_df$label == "woman"] <- "woman"
+    tsne2_df$relative_dist <- as.factor(tsne2_df$relative_dist)    # don't do this yet, I want to see if it matters
+    
+    sum(tsne2_df$label == 'paris')
+    
+    colors2 <- c("king"="red", "man"="darkred", "queen"="green", "woman"="darkgreen", "other"="gray")
+    alphas2 <- c("king"=1, "man"=1, "queen"=1, "woman"=1, "other"=0.3)
+    
+    
+    
+    
+    
+    g2 <- ggplot(data=tsne2_df, aes(x=X1, y=X2, 
+        # these each reference values of relative_dist, but use their own custom scaling        
+        fill=relative_dist, color=relative_dist, alpha=relative_dist)) +
+        geom_point(shape = 21) + 
+        scale_color_manual(values = colors2) +
+        scale_fill_manual(values = colors2) +
+        scale_alpha_manual(values = alphas2)  +
+        
+        #xlim(c(-13, -15)) +
+        #ylim(c(-7, -5)) 
+        
+        xlim(c(5, 7)) +
+        ylim(c(-12, 16))
+    
+    plot(g2)    
+    
+    
     
     
     
