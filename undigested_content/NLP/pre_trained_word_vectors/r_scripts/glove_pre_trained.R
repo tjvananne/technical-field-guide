@@ -82,7 +82,7 @@
     # save this out so we don't have to recalculate that again in the future
     saveRDS(glove, file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
     
-
+    glove <- readRDS(file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
     
     
     
@@ -90,6 +90,52 @@
     
     
 # exploring how to use the pre-trained word vector:
+    
+    
+    
+    # I want to actual comparison to be functionized
+    find_sim_wvs <- function(this_wv, all_wvs, top_n_res=40) {
+        # this_wv will be a numeric vector; all_wvs will be a data.frame with words as columns and dimesions as rows
+        require(text2vec)
+        this_wv_mat <- matrix(this_wv, ncol=length(this_wv), nrow=1)
+        all_wvs_mat <- as.matrix(all_wvs)
+        
+        if(dim(this_wv_mat)[[2]] != dim(all_wvs_mat)[[2]]) {
+            print("switching dimensions on the all_wvs_matrix")
+            all_wvs_mat <- t(all_wvs_mat)
+        }
+        
+        cos_sim = sim2(x=all_wvs_mat, y=this_wv_mat, method="cosine", norm="l2")
+        sorted_cos_sim <- sort(cos_sim[,1], decreasing = T) 
+        return(head(sorted_cos_sim, top_n_res))
+                
+    }
+    
+            # testing:
+            # the thing that is happening below needs to be a function
+            my_wv <- glove[['hammer']] - glove[['carpenter']] + glove[['policeman']]  # dang.
+            find_sim_wvs(my_wv, glove)
+            
+            # funny:
+            my_wv <- glove[['flock']] - glove[['geese']] + glove[['buffalo']]  # all cities because "buffalo, NY"
+            find_sim_wvs(my_wv, glove)
+            my_wv <- glove[['flock']] - glove[['geese']] + glove[['bison']]    # here we go, we got our "herds" we're looking for
+            find_sim_wvs(my_wv, glove)
+        
+            # geographic locations tend to work really well:
+            my_wv <- glove[['paris']] - glove[['france']] + glove[['germany']]  # berlin is the capital of germany
+            find_sim_wvs(my_wv,glove)
+        
+            # how close is "cant" to "cannot"
+            my_wv <- glove[['cant']]
+            find_sim_wvs(my_wv, glove)
+            my_wv <- glove[['cannot']]
+            find_sim_wvs(my_wv, glove, 100)
+    
+    
+# procedural/imperative version
+    
+    
     # install.packages('text2vec')
     library(text2vec)
     glove[['paris']]  # check it out
