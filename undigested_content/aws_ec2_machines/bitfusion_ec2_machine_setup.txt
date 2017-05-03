@@ -35,3 +35,38 @@ ship off) ubuntu@publicdnsfullyqualified.com:~ (fully qualified user@domain with
 
 
 same thing without the "-r" for just single files (then of course point the path to the single file
+
+
+______________________
+
+Tips for using aws for data analysis:
+- package everything into a single directory when you transfer it in
+- everything should have relative referencing for file paths
+- make sure to test it locally of course before spinning up the VM
+- (haven't tested this yet) get youself set up on a small instance then increase it later
+- my only concern here is that you might lose your storage based on how drastic the switch is?
+- utilize the AWS mobile app for monitoring spending and spinning up / shutting down instances
+
+
+
+Things I want to try later on:
+- if rJava is working, then try setting up email alerts for when things fail using mailR
+
+
+Things I'm not sure about yet (.pem is only for SSH, I can still RSTUDIO / JUPYTER):
+- do I need to have this .pem key on all computers that I want connecting to the remote machine? Is it safe to email this .pem key 
+
+
+# ok so the proper way to do this is here:
+http://stackoverflow.com/questions/3260739/add-keypair-to-existing-ec2-instance
+to create an additional key pair you should:
+1) get to root and create a new user
+2) add that user to sudoers list
+3) go back to "ubuntu" user
+4) su taylor  # "taylor" is name of second user
+5) generate the key and chmod it
+6) on local machine, scp it down using original .pem
+7) now you have another .pem for an aditional user to log in
+# but if I'm a single human... why not just email a copy of the existing original .pem?
+...I'm confused.. I think this above is just for additional users
+
