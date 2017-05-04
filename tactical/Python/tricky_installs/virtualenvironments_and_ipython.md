@@ -142,6 +142,7 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 - Running in Windows 10
 - Python error message says to go to this [site](http://aka.ms/vcpython27) and download Microsoft Visual C++ 9.0 for Python 2.7
 	- **Installing C++ compiler for Python 2.7 from the site above worked**
+- When installing **Python 3.5.3** I had to open a command prompt as administrator, cd into downloads folder and execute: `python-3.5.3-amd64.exe TargetDir=c:\Python35` and then it worked
 
 
 	

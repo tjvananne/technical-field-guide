@@ -26,15 +26,14 @@
     
 # read in data
     list.dirs()
-    list.files("LARGE_FILES_pre_trained")
+    list.files("LARGE_FILES_pre_trained", full.names = T)
     
     g6b <- scan(file = "LARGE_FILES_pre_trained/glove.6B.50d.txt", what="", sep="\n")
-        class(g6b)  # character
-        g6b[58]
-    
+    g6b_300 <- scan(file = "LARGE_FILES_pre_trained/glove.6B.300d.txt", what="", sep="\n")
+    g840b_300 <- scan(file = "LARGE_FILES_pre_trained/glove.840B.300d.txt", what="", sep="\n")
         
     # delete all objects except for 'g6b' object (for rapid testing without IO)
-    rm( list= setdiff(ls(), 'g6b') )
+    rm( list= setdiff(ls(), c('g6b', 'g6b_300')))
     
     
     
@@ -42,6 +41,7 @@
 # function defs for processing a pre-trained glove vector (from .txt format)
     # input .txt file, exports list of list of values and character vector of names (words)
     proc_pretrained_vec <- function(p_vec) {
+        
         
         # initialize space for values and the names of each word in vocab
         vals <- vector(mode = "list", length(p_vec))
@@ -81,10 +81,28 @@
     
     # save this out so we don't have to recalculate that again in the future
     saveRDS(glove, file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
-    
     glove <- readRDS(file="LARGE_FILES_pre_trained/glove_6B_50D_processed.rds")
     
     
+    # now lets load a larger pre-trained vector -- 2.7ish minutes?
+    t_temp <- Sys.time()
+    glove.300 <- proc_pretrained_vec(g6b_300)
+    (t_elap_temp <- paste0(round(as.numeric(Sys.time() - t_temp, units="mins"), digits = 2), " minutes"))
+    
+    # save this out
+    saveRDS(glove.300, file="LARGE_FILES_pre_trained/glove_6B_300D_processed.rds")
+    glove.300 <- readRDS(file="LARGE_FILES_pre_trained/glove_6B_300D_processed.rds")
+    
+    
+    
+    # bringing in the big guns -- 840 Billion tokens, 2.2M vocab, 300 dim
+    t_temp <- Sys.time()
+    glove840.300 <- proc_pretrained_vec(g840b_300)
+    (t_elap_temp <- paste0(round(as.numeric(Sys.time() - t_temp, units="mins"), digits = 2), " minutes"))
+    
+    # save this out
+    saveRDS(glove840.300, file="LARGE_FILES_pre_trained/glove_840B_300D_processed.rds")
+    glove.300 <- readRDS(file="LARGE_FILES_pre_trained/glove_840B_300D_processed.rds")
     
     
     
@@ -111,26 +129,86 @@
                 
     }
     
-            # testing:
-            # the thing that is happening below needs to be a function
-            my_wv <- glove[['hammer']] - glove[['carpenter']] + glove[['policeman']]  # dang.
-            find_sim_wvs(my_wv, glove)
-            
-            # funny:
-            my_wv <- glove[['flock']] - glove[['geese']] + glove[['buffalo']]  # all cities because "buffalo, NY"
-            find_sim_wvs(my_wv, glove)
-            my_wv <- glove[['flock']] - glove[['geese']] + glove[['bison']]    # here we go, we got our "herds" we're looking for
-            find_sim_wvs(my_wv, glove)
-        
-            # geographic locations tend to work really well:
-            my_wv <- glove[['paris']] - glove[['france']] + glove[['germany']]  # berlin is the capital of germany
-            find_sim_wvs(my_wv,glove)
-        
-            # how close is "cant" to "cannot"
-            my_wv <- glove[['cant']]
-            find_sim_wvs(my_wv, glove)
-            my_wv <- glove[['cannot']]
-            find_sim_wvs(my_wv, glove, 100)
+    
+    
+    # procedural, this shouldn't happen every time we call the above function:
+    glove840_mat <- t(as.matrix(glove840.300))   # 2M rows, 300 cols
+    wv_mat <- matrix(glove840.300[['india']], ncol=length(glove840.300[['india']]), nrow=1)
+    head(sort(sim2(x=glove840_mat, y=wv_mat, method='cosine', norm='l2')[,1], decreasing=T), 10)
+    
+    
+    dim(glove840.300)
+    names(glove840_mat[100:150,2])
+    
+    
+    
+    this_indx <- which(names(glove840_mat[,1]) == 'india')
+    this_numvec <- glove840_mat[this_indx,]
+    this_vecmat <- matrix(this_numvec, nrow=1)
+    
+    head(sort(sim2(x=glove840_mat, y=this_vecmat, method='cosine', norm='l2')[,1], decreasing=T), 10)
+    similarity_matrix <- sim2(x=glove840_mat, y=this_vecmat, method='cosine', norm='l2')
+    dim(similarity_matrix)  # 2M rows by 1 column (one value for every item)
+    head(similarity_matrix)
+    
+    gc()
+    
+    sorted_sim_matrix <- sort(similarity_matrix[,1], decreasing = T)
+    head(sorted_sim_matrix)
+    
+    
+    
+    
+    testmat <- matrix(1:4, ncol=2)
+    testmat[1,] # first row
+    testmat[,1] # first col
+    
+            # # testing:
+    
+            # ok wow, this one is wayyyy more accurate. This is exciting!
+            # switch everything to this one here, also, note it has capitalized words and lowercase
+    
+            # this one is much more case sensitive than the others... 
+            glove840.300[['india']][1:10]
+            glove840.300[['India']][1:10]
+            glove840.300[['INDIA']][1:10]
+    
+            this_word_vector <- glove840.300[['king']] - glove840.300[['man']] + glove840.300[['queen']]
+            find_sim_wvs(this_word_vector, glove840.300, 10)
+    
+            # # we're hoping that this will be most similar to the "queen" vector in our giant list of vectors
+            # this_word_vector <- glove.300[['king']] - glove.300[['man']] + glove.300[['woman']]      
+            # find_sim_wvs(this_word_vector, glove.300)
+            # 
+            # 
+            # # funny... "buffalo" tends to gravitate towards the city while "bison" is the animal
+            # my_wv <- glove.300[['flock']] - glove.300[['geese']] + glove.300[['buffalo']]  # all cities because "buffalo, NY"
+            # find_sim_wvs(my_wv, glove.300, top_n_res=10)
+            # my_wv <- glove.300[['flock']] - glove.300[['geese']] + glove.300[['bison']]    # here we go, we got our "herds" we're looking for
+            # find_sim_wvs(my_wv, glove.300, top_n_res=10)
+            # 
+            # 
+            # 
+            # 
+            # # the thing that is happening below needs to be a function
+            # my_wv <- glove[['hammer']] - glove[['carpenter']] + glove[['policeman']]  # dang.
+            # find_sim_wvs(my_wv, glove)
+            # 
+            # # funny:
+            # my_wv <- glove[['flock']] - glove[['geese']] + glove[['buffalo']]  # all cities because "buffalo, NY"
+            # find_sim_wvs(my_wv, glove)
+            # my_wv <- glove[['flock']] - glove[['geese']] + glove[['bison']]    # here we go, we got our "herds" we're looking for
+            # find_sim_wvs(my_wv, glove)
+            # 
+            # # geographic locations tend to work really well:
+            # my_wv <- glove[['paris']] - glove[['france']] + glove[['germany']]  # berlin is the capital of germany
+            # find_sim_wvs(my_wv,glove)
+            # 
+            # # how close is "cant" to "cannot"
+            # my_wv <- glove[['cant']]
+            # find_sim_wvs(my_wv, glove)
+            # my_wv <- glove[['cannot']]
+            # find_sim_wvs(my_wv, glove, 100)
     
     
 # procedural/imperative version
