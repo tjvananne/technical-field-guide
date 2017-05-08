@@ -1,4 +1,14 @@
 
+# 05-07-17: this is a super helpful question regarding batch sizes, epoch, etc.
+# https://stats.stackexchange.com/questions/153531/what-is-batch-size-in-neural-network
+
+# * one epoch = one forward pass and one backward pass of all the training examples
+# * batch size = the number of training examples in one forward/backward pass. The higher 
+    # the batch size, the more memory space you'll need.
+# * number of iterations = number of passes, each pass using [batch size] number of 
+    # examples. To be clear, one pass = one forward pass + one backward pass (we do 
+    # not count the forward pass and backward pass as two different passes).
+
 
 #' 05-05-17: I started with the "fuly_connected_nnet_in_raw_R file because I thought I'd be
 #' learning how to code a neural net in raw R with that article, but it led me to
@@ -17,6 +27,11 @@
 
 # Prediction
 predict.dnn <- function(model, data = X.test) {
+    
+
+        model = model # this should already exist (go halfway through train function til you get to predict)
+        data = testdata[,-y]
+    
     # new data, transfer to matrix
     new.data <- data.matrix(data)
     
@@ -108,7 +123,7 @@ train.dnn <- function(x, y, traindata=data, testdata=NULL,
         K <- length(unique(Y))  # output nodes
         H <-  hidden            # hidden nodes
         
-            print(c(D, K, H))
+            print(c(D, H, K))
         
         
         # **********W1 and b1 are the mappings between inputs and first hidden layer
@@ -167,6 +182,8 @@ train.dnn <- function(x, y, traindata=data, testdata=NULL,
         
         # forward ....
         # 1 indicate row, 2 indicate col
+        
+
         hidden.layer <- sweep(X %*% W1 , 2, b1, '+')
                 # X is a 75row/4col matrix
                 # W1 is a 4row/6col matrix (6, one for each node in the next layer which is the hidden layer)
@@ -186,13 +203,50 @@ train.dnn <- function(x, y, traindata=data, testdata=NULL,
         
         # softmax
         score.exp <- exp(score)
+                
+                score[1,1]
+                exp(score[1,1])
+                score.exp[1,1]
+                score.exp
+        
         # debug
         probs <- score.exp/rowSums(score.exp)
         
+                # is the exp function really necessary to get these to sum to one?
+                probs2 <- score/rowSums(score)
+        
+                sum(probs[1,]); probs[1,]; score.exp[1,]
+                sum(probs2[1,]); probs2[1,]; score[1,]
+                        probs
+                        probs2
+        
+        
         # compute the loss
-        corect.logprobs <- -log(probs[Y.index])
-        data.loss  <- sum(corect.logprobs)/batchsize
+        # this aligns the probability we currently have for each of the "correct" classes
+        
+        # this is really clever use of Matrix1[Matrix2] where Matrix2 is essentially a 
+        # mapping between rownumber and column number of the "answer" classification
+        corect.logprobs <- -log(probs[Y.index]) 
+        
+                probs    # These are our predicted class probs, which one to use??
+                Y.index  # where these are the rownumber/column that correspond to which col to use above
+        
+        
+                corect.logprobs
+                # this is interesting...
+                # this is the manual way to do the mapping he did above
+                c(probs[1:25,1], probs[26:50,2], probs[51:75,3]) == probs[Y.index]
+                # both probs and Y.index are matrices
+                # "probs[Y.index]" is subsetting "probs" based on column indeces stored in Y.index
+        
+        # summing up all of the correct logprobs then dividing by this total batch size
+        data.loss  <- sum(corect.logprobs)/batchsize  # this is essentially the average loss per obs in batch
+        
+        
+        # square all weights, sum them, then sum sums, then multiply by (reg * 1/2)
         reg.loss   <- 0.5*reg* (sum(W1*W1) + sum(W2*W2))
+        
+        
         loss <- data.loss + reg.loss
         
         # display results and update model
