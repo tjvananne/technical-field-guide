@@ -14,6 +14,7 @@
 # install.packages("drat", repos="https://cran.rstudio.com")
 # drat:::addRepo("dmlc")
 # install.packages("mxnet")
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 library(mxnet)
 library(mlbench)
 data(Sonar, package='mlbench')
@@ -43,7 +44,33 @@ pred.label <- max.col(t(preds)) - 1
 table(pred.label, test.y)
 
 
-# that was dumb....
+
+
+# MNIST -------------------------------------------------------------
+# that was dumb.... let's move on to an example of MNIST
 rm(list=ls())
+
+# you'll have to create this directory on whatever machine you run this from:
+
+datapath <- 'LARGE_FILES_MNIST_data/'
+
+train <- read.csv(file=paste0(datapath, 'train.csv'), stringsAsFactors = F, header=T)
+test <- read.csv(file=paste0(datapath, 'test.csv'), stringsAsFactors = F, header=T)
+
+?image
+
+
+    # testing what an image looks like when plotted
+    36918 -> this_row ; img1mat <- matrix(as.numeric(train[this_row, -1]), byrow=T, ncol=28, nrow=28); train[this_row,1]; 
+    dim(img1mat)
+    
+    grayscale_vals <- gray((0:32) / 32)
+    image(img1mat, main="raw matrix", col=grayscale_vals)
+    image(img1mat[nrow(img1mat):1,], main="reversing rows, bottom to top", col=grayscale_vals)
+    image(t(img1mat[nrow(img1mat):1,]), main="transpose of row reversal", col=grayscale_vals)
+
+
+
+
 
 
