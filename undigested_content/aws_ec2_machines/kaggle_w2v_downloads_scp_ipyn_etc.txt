@@ -1,0 +1,153 @@
+Linux terminal (Ubuntu) download a file:
+
+wget to download -------------------------------------------------------------------------
+
+downloads file to current directory:
+wget "http://domain.com/directory/4?action=AttachFile&do=view&target=file.tgz" 
+
+
+downloads file to the directory specified:
+wget  -O /home/omio/Desktop/ "http://thecanadiantestbox.x10.mx/CC.zip"
+
+
+wget with credentials --------------------------------------------------------------------
+
+https://askubuntu.com/questions/29079/how-do-i-provide-a-username-and-password-to-wget
+using wget with a password:
+wget --user user --password pass http://example.com/
+
+
+a mildly safer way (note the leading white space, this prevents command from being saved in history):
+wget --user=remote_user --password=SECRET ftp://ftp.example.com/file.ext
+This still enables people to view password in ps, top, htop, and similar
+
+
+safest way to do this where password isn't even visible to you:
+wget --user=remote_user --ask-password ftp://ftp.example.com/file.ext
+Password for user `remote_user': [SECRET (not visible)]
+
+
+perfect!
+wget --user=tjvananne --ask-password <url path to the zip file>
+
+
+unzipping the downloaded content ---------------------------------------------------------
+
+if `unzip` command isn't available then get it (this is ubuntu)
+apt-get install unzip
+
+then use it:
+unzip file.zip
+
+ran into this issue:
+https://askubuntu.com/questions/54904/unzip-error-end-of-central-directory-signature-not-found
+
+
+they say to try using this:
+jar xvf file.zip
+
+do a `man jar` command to read the docs on this one and test whether its installed
+sudo apt-get install fastjar 
+this will install it if you don't have it already
+
+
+
+this didn't work for a kaggle train file... going to try 7z?
+https://www.howtoforge.com/tutorial/how-to-install-and-use-7zip-file-archiver-on-ubuntu-linux/
+
+# going to just install this top first one to see if that is all I need, will circle back if needed
+sudo apt-get install p7zip-full
+sudo apt-get install p7zip-rar
+
+
+
+https://www.kaggle.com/general/6604
+https://github.com/floydwch/kaggle-cli
+https://askubuntu.com/questions/910349/wget-downloads-an-html-instead-of-my-file/910355 # follow up on this one to see if it ever gets answered
+
+
+this is a dead end right now... going to try kaggle-cli command line interface
+https://github.com/floydwch/kaggle-cli
+sudo pip install kaggle-cli
+
+
+SUCCESS:
+https://github.com/coursera-dl/coursera-dl/issues/554
+kg download -u USERNAME -p PASSWORD -c COMPETITION
+where COMPETITION is the url string of the competition when you visit it in browser
+
+this will likely fail based on the version of html5lib in python
+python
+import html5lib
+html5lib.__version__  # this will likely be something like 0.999999
+ctrl Z # exit python
+
+
+sudo pip install --upgrade html5lib==1.0b8
+# Nooow try it, and it should work much better
+kg download -u tjvananne -p PASSWORD -c quora-question-pairs
+
+now we can unzip:
+unzip train.csv.zip
+unzip test.csv.zip
+dir  # we can see that we have the files unzipped!
+
+
+
+# now for downloading w2v from google
+https://code.google.com/archive/p/word2vec/
+
+
+that leads to here
+https://drive.google.com/uc?id=0B7XkCwpI5KDYNlNUTTlSS21pQmM&export=download
+
+its one of these two links
+https://drive.google.com/open?id=0B7XkCwpI5KDYNlNUTTlSS21pQmM
+https://drive.google.com/uc?export=download&confirm=Yc2J&id=0B7XkCwpI5KDYNlNUTTlSS21pQmM
+
+Ok so it was neither of those links...
+
+It is THIS one!
+https://doc-0g-8s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2p5r2coch6ela8k9dl7gi20290p65a0t/1494424800000/06848720943842814915/*/0B7XkCwpI5KDYNlNUTTlSS21pQmM?e=download
+
+
+so:
+wget https://doc-0g-8s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2p5r2coch6ela8k9dl7gi20290p65a0t/1494424800000/06848720943842814915/*/0B7XkCwpI5KDYNlNUTTlSS21pQmM?e=download
+
+
+well actually do this to rename the output file:
+wget -O w2v_gnews300.bin https://doc-0g-8s-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/2p5r2coch6ela8k9dl7gi20290p65a0t/1494424800000/06848720943842814915/*/0B7XkCwpI5KDYNlNUTTlSS21pQmM?e=download
+
+
+Here's how I found it... in chrome I opened up developer console (F12) then navigated to the "network" tab and clicked the "download" button in the browser. This gave me the actual URL I was being redirected to that housed the physical file.. this downloaded super quickly. Note this will be a binary file.
+
+
+# transferring the file to remote AWS -----------------------------------------------------
+
+I copied my little .pem key thing into the directory that has my ipython notebook that I want to send to the remote server (also check your notebook to make sure it is ready to be run on AWS -- filepaths and whatnot might be a bit different).
+
+# this is the command, this is all it takes to get it where I want it
+$ scp -i ./bitfus_tensor.pem LSTM_word2vec_exp_AWS_remote.ipynb ubuntu@ec2-107-
+23-134-148.compute-1.amazonaws.com:~/quora_dupes/py_scripts
+
+
+note: I had to create that "/quora_dupes/py_scripts" file structure in the remote box before running the above command obviously...
+
+
+# ok so lesson learned here... I need to build my tree directory under the "pynb" directory at the root of my ubuntu login on the remote box... this appears to be the entry point for jupyter notebook.
+
+this was an easy fix, cd to the root where `dir` shows "pynb" and "quora_dupes"
+sudo mv quora_dupes pynb/quora_dupes
+
+now I have moved all of the quora_dupes directory and its contents underneath pynb
+(I didn't even have to restart jupyter, this updated automatically to show me the new content. Cool!)
+
+
+Ok.... my issue was that I didn't have the correct kernel going.. I had "no kernel"... it was hard to tell on mobile
+
+so now I'm running into an issue where I think my googlenews w2v isn't correct or is corrupt on the remote box (it took a suspiciously small amount of time to download, so I thought something was wrong.)
+
+
+When I pick this back up... do these steps:
+locally cd into LARGE_FILES_word_vectors in the quora dupes repo:
+$ scp -i ../py_scripts/bitfus_tensor.pem GoogleNews-vectors-negative300.bin ubuntu@ec2-34-204-37-189.compute-1.amazonaws.com:~
