@@ -1,0 +1,35 @@
+# General Linux commands in openSUSE Leap 42.2
+
+# 0) create a group
+
+    groupadd <groupname>
+    
+    sudo groupadd rstudio_users
+    
+
+# 1) add existing user to a group
+
+    "-a" is append the user to the groups in "-G"
+    
+    "-G" which group to add the user to
+
+    sudo usermod -aG rstudio_users taylor
+    
+    # to check what groups a user is in:
+    
+    groups <username>
+    
+    groups taylor
+    
+    # to grep who all is in a group
+    
+    grep 'rstudio_users' /etc/group
+    
+
+# 2) adding a user with a specific group
+
+    # template:
+    useradd -g <group> -p <password> -d /home/<homefolder name> -m <username>
+    
+    
+    
