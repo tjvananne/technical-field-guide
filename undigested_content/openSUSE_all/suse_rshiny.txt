@@ -1,4 +1,6 @@
 
+# http://docs.rstudio.com/shiny-server/
+
 # Installing R Shiny
 
 So first thing, you should already have R base installed (make sure it is at least 3.2.2, as that is what these directions specify
