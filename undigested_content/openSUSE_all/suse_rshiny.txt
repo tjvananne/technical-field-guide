@@ -1,0 +1,89 @@
+
+# Installing R Shiny
+
+So first thing, you should already have R base installed (make sure it is at least 3.2.2, as that is what these directions specify
+
+# 1) install shiny
+
+go into R, or Rstudio server, or wherever R is.
+	
+	install.packages("shiny")
+
+
+
+# 2) download the necessary files:
+
+	wget https://download3.rstudio.org/centos5.9/x86_64/shiny-server-1.5.3.838-rh5-x86_64.rpm
+
+	# run install
+
+	sudo zypper install shiny-server-1.5.3.838-rh5-x86_64.rpm
+
+	# you'll get a dependency warning here, just select the second (2) option
+	# which threatens you that stuff will break, its fine. this is fine.
+
+
+# 3) make some changes to config files
+
+	vim ~/.Rprofile
+
+	# add this stuff:
+	options(download.file.method = "libcurl")
+	local({
+		r <- getOption("repos")
+		r["CRAN"] <- "https://cran.rstudio.com/"
+		options(repos=r)
+	})
+
+
+# 4) install the shiny package
+
+	sudo su - -c "R -e \"install.packages('shiny')\""
+	# this didn't really work, something about a mirror isn't set...
+	# lets just go into R and do the shiny install from there and see if that works
+
+
+
+
+
+# 3) stopping and starting
+
+	sudo systemctl start shiny-server
+	# this doesn't work...
+
+	# I think this'll be better:
+	sudo systemctl enable shiny-server
+
+	# this gives the message:
+	# shiny-server.service is not a native service, redirecting to systemd-sysv-install
+	# Executing /usr/lib/systemd/systemd-sysv-install enable shiny-server
+
+	# someone here mentions the need for a symlink between shiny-server.service and
+	# some other file... now at least I know where some of this stuff is located.
+	# https://stackoverflow.com/questions/36487006/restart-shiny-server-on-centos
+
+
+# 4) ok so critical user information...
+
+	# check whats in the config file
+	sudo vim /etc/shiny-server/shiny-server.conf
+
+	# there is a "run_as" flag... it should say "shiny"
+	# I think we need to create this user and give it some good access
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+

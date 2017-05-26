@@ -31,5 +31,19 @@
     # template:
     useradd -g <group> -p <password> -d /home/<homefolder name> -m <username>
     
-    
+    # added a test user.. but they can't log in    
+
+
+# 3) it is very helpful to be able to see running processes and kill them if needed
+
+	# this will be a good way to see all running processes
+	ps aufx 
+
+	# grep for specific processes
+	ps aufx | grep 'shiny-server'
+
+	# find process by PID (should be second column)
+	sudo kill -9 <pid>
+
+	# I don't know what the "-9" flag does, but it works if you don't include it as well
     
