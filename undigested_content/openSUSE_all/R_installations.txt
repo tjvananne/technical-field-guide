@@ -1,0 +1,93 @@
+# Installing R, Rstudio Server in openSUSE Leap 42.2
+# commands executed in my open suse vm environment
+# https://forums.opensuse.org/showthread.php/472172-Has-anyone-successfully-installed-RStudio-Server-on-OpenSUSE
+# https://support.rstudio.com/hc/en-us/sections/200150693-RStudio-Server
+# https://support.rstudio.com/hc/en-us/articles/234653607-Getting-Started-with-RStudio-Server
+
+
+
+# 1) Install R base
+
+    sudo zypper install R-base
+
+status: successful
+    
+# 2) download necessary files
+
+    cd ~/Downloads
+    wget https://download2.rstudio.org/rstudio-server-suse-1.0.143-x86_64.rpm
+    
+# 3) move the files to where I want them
+
+    cd ..
+    mv ~/Downloads/rstudio-server-suse-1.0.143-x86_64.rpm rstudio-server-suse-1.0.143-x86_64.rpm
+    
+# 4) install
+
+    sudo zypper install rstudio-server-suse-1.0.143-x86_64.rpm
+    
+# 5) testing to make sure it worked
+
+    # this checks /etc/rstudio/rserver.conf and
+    # /etc/rstudio/rsession.conf to make sure they're valid
+    sudo rstudio-server verify-installation
+    
+Now you should be able to open your browser on this box and go to the local ip address and port 8787 to view the rstudio login screen
+
+http://127.0.0.1:8787
+
+# NOTE: In order to have multiple versions of R accessible from RStudio / Rstudio Server, you have to build each R instance from source
+
+# 6) log in to rstudio server (open source)
+
+you can use your main system-login credentials in rstudio server to log in. One of the next steps is going to be setting up new users and limiting their resource usage.
+
+# 7) Install gcc so we can compile and install new R packages
+
+    # many tidyverse packages rely on these
+    sudo zypper install gcc
+    # -n is for "non-interactive" mode which doesn't confirm install
+    sudo zypper -n install gcc-c++
+
+Now we'll be able to install R packages in R studio server
+
+# 8) Configuring RStudio server
+
+    # this is how to change the default port for rstudio server to listen on
+    # /etc/rstudio/rserver.conf
+    www-port=80
+    
+    # rstudio binds to address 0.0.0.0 (accepting connections from any remote ip)
+    # change this by using www-address entry
+    www-address=127.0.0.1
+    # now only local host can access this
+    
+    # always restart server after making changes:
+    sudo rstudio-server restart
+    
+    # selecting which version of R to use
+    rsession-which-r=/usr/local/bin/R
+    
+    # limit rstudio access to only members of specific group
+    auth-required-user-group=rstudio_users
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

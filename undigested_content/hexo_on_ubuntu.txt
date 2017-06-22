@@ -1,0 +1,77 @@
+# hexo on ubuntu
+
+# install nvm
+
+### https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-an-ubuntu-14-04-server#how-to-install-using-nvm
+
+sudo apt-get update
+
+sudo apt-get install build-essential libssl-dev
+
+curl https://raw.githubusercontent.com/creationix/nvm/v0.16.1/
+install.sh | sh
+
+
+source ~/.profile
+
+nvm ls-remote
+
+nvm install v6.10.3  # latest stable LTS version on website
+
+nvm use v6.10.3
+
+node -v
+
+nvm ls
+
+nvm alias default v6.10.3
+
+nvm use default
+
+# install hexo
+
+### https://www.digitalocean.com/community/tutorials/how-to-create-a-blog-with-hexo-on-ubuntu-14-04
+
+npm install hexo-cli -g
+
+hexo init <blog dirname here>
+
+hexo generate
+
+hexo serve
+
+### now go visit localhost:4000
+
+to install a new theme:
+
+### from inside the root of the blog dir:
+
+git clone https://github.com/ppoffice/hexo-theme-icarus.git themes/icarus
+
+### that puts the icarus theme inside of the 'themes' directory
+
+edit your _config.yml 'theme:icarus'
+
+### this is for the search component of the blog
+
+npm install -S hexo-generator-json-content
+
+### rename <blog root>/themes/icarus/_config.yml.example to
+### <blog root>/themes/icarus/_config.yml 
+
+### all _config.yml changes from here on out (for the most part) will be at the <blog root>/themes/icarus/_config.yml file, not the root directory's _config.yml file
+
+
+
+### copy the themes/icarus/_source/categories 
+### and themes/icarus/_source/tags directories into
+### <blog root>/source/ directory
+
+### Add this to 
+
+
+
+
+
+
+

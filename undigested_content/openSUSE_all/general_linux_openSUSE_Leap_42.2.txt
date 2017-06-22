@@ -1,0 +1,49 @@
+# General Linux commands in openSUSE Leap 42.2
+
+# 0) create a group
+
+    groupadd <groupname>
+    
+    sudo groupadd rstudio_users
+    
+
+# 1) add existing user to a group
+
+    "-a" is append the user to the groups in "-G"
+    
+    "-G" which group to add the user to
+
+    sudo usermod -aG rstudio_users taylor
+    
+    # to check what groups a user is in:
+    
+    groups <username>
+    
+    groups taylor
+    
+    # to grep who all is in a group
+    
+    grep 'rstudio_users' /etc/group
+    
+
+# 2) adding a user with a specific group
+
+    # template:
+    useradd -g <group> -p <password> -d /home/<homefolder name> -m <username>
+    
+    # added a test user.. but they can't log in    
+
+
+# 3) it is very helpful to be able to see running processes and kill them if needed
+
+	# this will be a good way to see all running processes
+	ps aufx 
+
+	# grep for specific processes
+	ps aufx | grep 'shiny-server'
+
+	# find process by PID (should be second column)
+	sudo kill -9 <pid>
+
+	# I don't know what the "-9" flag does, but it works if you don't include it as well
+    
