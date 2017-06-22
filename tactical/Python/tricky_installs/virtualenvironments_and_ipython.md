@@ -63,6 +63,20 @@ Go to wherever you specified your WORKON_HOME path to be and make sure it actual
 
 In the same command prompt window, test out your `deactivate`, `workon py3464` commands to make sure you're able to toggle between activating and deactivating your environment
 
+
+## Minor Simplification to Mention here:
+
+**Instead of messing around too much with the order your Python installations show up in your path environment variable, you can just pass in which version of
+Python you want to use when creating your virtual environment like so:**
+
+    mkvirtualenv --python C:/Python34/python.exe mypython34env
+	
+**I checked this by first running mkvirtualenv without any "--python" flag, and it defaulted to Python35, but I was successfully able to create a virtual env
+with the Python34 interpreter using the method above. So anywhere in this document where I mention the shifting of values in the path environment variable, it
+is safe to assume that you can use this method above instead.**
+
+
+
 ## 6) Set up Paths for secondary Python version
 
 Now go back to environment variables and add these two to your path manually (I'm adding `Python27` because that is the secondary version I would like to
