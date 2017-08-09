@@ -145,6 +145,45 @@ using this guide [here](http://help.pythonanywhere.com/pages/IPythonNotebookVirt
 
     python -m ipykernel install --user --name=py3464
 
+
+	
+# In Anaconda (Anaconda3)
+
+
+**It helps to add the path to your %PATH% system variable beforehand**
+
+
+* C:\ProgramData\Anaconda3\Scripts
+
+
+## Example From Command Prompt
+
+
+	(root) >> conda create --name test3 python=3
+	(root) >> activate test3
+	(test3) >> conda install jupyter
+	(test3) >> jupyter notebook
+
+	
+	
+**test3 env not listed in jupyter interpreters**
+
+
+	(test3) >> conda update jupyter
+	(test3) >> jupyter notebook
+
+	
+**test3 env not listed in jupyter interpreters**
+
+
+	(test3) >> python -m ipykernel install --user --name=test3
+	(test3) >> jupyter notebook
+
+	
+**yes, test3 is available in jupyter notebook now**
+
+	
+	
 	
 ## Log of Errors I received while setting this up:
 
